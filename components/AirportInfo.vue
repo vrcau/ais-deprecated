@@ -21,13 +21,13 @@
         <el-tab-pane label="TAXI"> </el-tab-pane>
         <el-tab-pane label="SID"> </el-tab-pane>
         <el-tab-pane label="STAR">
-          <client-only>
+          <ClientOnly>
             <el-menu class="chart-list">
               <el-menu-item class="chart-item"
                 >STAR RWY10R (ASOUL/AIKUN)</el-menu-item
               >
             </el-menu>
-          </client-only>
+          </ClientOnly>
         </el-tab-pane>
         <el-tab-pane label="APP"> </el-tab-pane>
         <el-tab-pane label="REF"> </el-tab-pane>
@@ -43,6 +43,9 @@ export default defineComponent({
       selectPage: "",
     };
   },
+  mounted() {
+    console.log(useRoute().params.icao);
+  }
 });
 </script>
 

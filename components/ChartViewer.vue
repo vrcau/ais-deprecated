@@ -1,6 +1,6 @@
 <template>
   <el-empty v-if="chart == undefined" description="在？看看图？"></el-empty>
-  <client-only>
+  <ClientOnly>
     <Viewer :options="options">
       <img
         :src="chart?.uri"
@@ -9,7 +9,7 @@
         style="visibility: collapse"
       />
     </Viewer>
-  </client-only>
+  </ClientOnly>
 </template>
 
 <script lang="ts">

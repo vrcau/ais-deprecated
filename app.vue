@@ -6,14 +6,18 @@
       </el-header>
       <el-container>
         <el-aside width="64px">
-          <client-only>
+          <ClientOnly>
             <el-menu router collapse class="navbar">
-              <el-menu-item v-for="item in navgationItems" :index="item.uri" :key="item.uri">
-                <el-icon><component :is="item.icon"/></el-icon>
+              <el-menu-item
+                v-for="item in navgationItems"
+                :index="item.uri"
+                :key="item.uri"
+              >
+                <el-icon><component :is="item.icon" /></el-icon>
                 <template #title>{{ item.name }}</template>
               </el-menu-item>
             </el-menu>
-          </client-only>
+          </ClientOnly>
         </el-aside>
         <el-main style="padding: 0">
           <NuxtPage />
@@ -34,16 +38,8 @@ export default defineComponent({
     return {
       isDark: useDark(),
       navgationItems: [
-        {
-          icon: "Document",
-          name: "Airport Charts",
-          uri: "/",
-        } as NavigationItem,
-        {
-          icon: "Memo",
-          name: "AIP",
-          uri: "/aip",
-        } as NavigationItem,
+        new NavigationItem("HomeFilled", "首页", "/"),
+        new NavigationItem("Memo", "其他航图", "/aip"),
       ],
     };
   },

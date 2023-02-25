@@ -2,7 +2,7 @@
   <div class="app-header">
     <img height="20" src="~/assets/VAU.svg" />
     <client-only>
-      <el-autocomplete class="search-input" :trigger-on-focus="false" placeholder="搜索" />
+      <el-autocomplete class="search-input" :trigger-on-focus="false" placeholder="搜索机场" />
     </client-only>
     <el-switch v-model="isDark" />
   </div>
