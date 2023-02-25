@@ -8,6 +8,13 @@
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
+    "@iconify-json/ep": "^1.1.9",
     "nuxt": "^3.2.2"
+  },
+  "dependencies": {
+    "@element-plus/icons-vue": "^2.0.10",
+    "@element-plus/nuxt": "^1.0.3",
+    "element-plus": "^2.2.32",
+    "v-viewer": "^3.0.11"
   }
 }
