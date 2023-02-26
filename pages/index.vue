@@ -18,25 +18,28 @@
       <el-col :span="6">
         <el-card>
           <el-statistic
-            title="当前周期 - 更新于 2023年2月26日"
+            :title="
+              '当前周期 - 更新于 ' +
+              getTimeString(cycleInfo?.lastCycleUpdatedAt as number)
+            "
             prefix="Cycle"
-            :value="2"
+            :value="pending ? 0 : cycleInfo?.cycle"
           />
         </el-card>
       </el-col>
       <el-col :span="4">
         <el-card>
-          <el-statistic title="收录机场" suffix="座" :value="1" />
+          <el-statistic title="收录机场" suffix="座" :value="pending ? 0 : cycleInfo?.airports" />
         </el-card>
       </el-col>
       <el-col :span="4">
         <el-card>
-          <el-statistic title="收录航图" suffix="张" :value="3" />
+          <el-statistic title="收录航图" suffix="张" :value="pending ? 0 : cycleInfo?.charts" />
         </el-card>
       </el-col>
       <el-col :span="4">
         <el-card>
-          <el-statistic title="生效 NOTAM" suffix="个" :value="10" />
+          <el-statistic title="生效 NOTAM" suffix="个" :value="pending ? 0 : cycleInfo?.notams" />
         </el-card>
       </el-col>
     </el-row>
@@ -67,12 +70,22 @@
   </div>
 </template>
 
-<script lang="ts">
-export default defineComponent({
-  data() {
-    return {};
-  },
-});
+<script lang="ts" setup>
+import CycleInfo from "@/types/CycleInfo";
+
+const { pending, data: cycleInfo } = useLazyAsyncData<CycleInfo>(
+  "cycleInfo",
+  () => $fetch("/api/info")
+);
+
+function getTimeString(time: number): string {
+  var date = new Date(time);
+  return `${date.getUTCFullYear()}-${
+    date.getUTCMonth() + 1
+  }-${
+    date.getUTCDate() + 1
+  }`;
+}
 </script>
 
 <style>
@@ -90,6 +103,6 @@ export default defineComponent({
   background-position: center bottom -100px;
   background-repeat: no-repeat;
   background-size: cover;
-  background-image: url("_nuxt/assets/home.webp");
+  background-image: url("/home.webp");
 }
 </style>
