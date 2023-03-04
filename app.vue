@@ -1,13 +1,13 @@
 <template>
   <div style="height: 100%" :class="isDark ? 'dark' : ''">
     <el-container style="height: 100%">
-      <el-header>
+      <el-header style="padding-left: 5px">
         <AppHeader />
       </el-header>
       <el-container>
         <el-aside width="64px">
           <ClientOnly>
-            <el-menu router collapse class="navbar">
+            <el-menu router collapse class="navbar" popper-effect="light">
               <el-menu-item
                 v-for="item in navgationItems"
                 :index="item.uri"

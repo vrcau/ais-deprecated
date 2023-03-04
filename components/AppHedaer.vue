@@ -1,24 +1,35 @@
 <template>
   <div class="app-header">
-    <img height="20" src="~/assets/VAU.svg" />
-    <ClientOnly>
-      <el-autocomplete
-        class="search-input"
-        v-model="searchKeyword"
-        :fetch-suggestions="querySearch"
-        :trigger-on-focus="false"
-        @select="selectAirport"
-        placeholder="搜索机场"
-      >
-        <template #default="{ item }">
-          <div class="search-item">
-            <p class="search-item-name">{{ item.name }}</p>
-            <p class="search-item-icao">{{ item.icao }}</p>
-          </div>
-        </template>
-      </el-autocomplete>
-    </ClientOnly>
-    <el-switch v-model="isDark" />
+    <div class="app-header-icon">
+      <img height="25" src="~/assets/VAU.svg" />
+    </div>
+    <div class="app-header-search-bar">
+      <ClientOnly>
+        <el-autocomplete
+          class="search-input"
+          v-model="searchKeyword"
+          :fetch-suggestions="querySearch"
+          :trigger-on-focus="false"
+          @select="selectAirport"
+          placeholder="搜索机场"
+        >
+          <template #default="{ item }">
+            <div class="search-item">
+              <p class="search-item-name">{{ item.name }}</p>
+              <p class="search-item-icao">{{ item.icao }}</p>
+            </div>
+          </template>
+        </el-autocomplete>
+      </ClientOnly>
+    </div>
+    <div class="app-header-theme-switcher">
+      <el-switch
+        active-icon="Moon"
+        inactive-icon="Sunny"
+        inline-prompt
+        v-model="isDark"
+      />
+    </div>
   </div>
 </template>
 
@@ -48,8 +59,21 @@ function selectAirport(airport: Airport) {
   height: 100%;
 }
 
-.search-input {
-  margin: 0 20px;
+.app-header-icon {
+  display: flex;
+  justify-content: center;
+  flex: 0 0 55px;
+  max-width: 55px;
+}
+
+.app-header-search-bar {
+  flex: 0 0 10%;
+  margin-left: 3px;
+}
+
+.app-header-theme-switcher {
+  flex: 0 0 auto;
+  margin-left: 85%;
 }
 
 .search-item {
