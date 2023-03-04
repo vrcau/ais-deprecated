@@ -36,18 +36,8 @@
     <el-tab-pane label="NOTAM"> </el-tab-pane>
   </el-tabs>
 </template>
-<script>
-export default defineComponent({
-  data() {
-    return {
-      selectPage: "",
-    };
-  },
-  mounted() {
-    console.log(useRoute().params.icao);
-  }
-});
-</script>
+
+<script setup lang="ts"></script>
 
 <style>
 .airport-icao-title {

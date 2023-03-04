@@ -9,7 +9,7 @@
           <ClientOnly>
             <el-menu router collapse class="navbar" popper-effect="light">
               <el-menu-item
-                v-for="item in navgationItems"
+                v-for="item in navigationItems"
                 :index="item.uri"
                 :key="item.uri"
               >
@@ -27,26 +27,17 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import "element-plus/theme-chalk/dark/css-vars.css";
 import AppHeader from "./components/AppHedaer.vue";
 import NavigationItem from "./types/NavigationItem";
 import { useDark } from "@vueuse/core";
 
-export default defineComponent({
-  data() {
-    return {
-      isDark: useDark(),
-      navgationItems: [
-        new NavigationItem("HomeFilled", "首页", "/"),
-        new NavigationItem("Memo", "其他航图", "/aip"),
-      ],
-    };
-  },
-  components: {
-    AppHeader,
-  },
-});
+const isDark = useDark();
+const navigationItems = reactive([
+  new NavigationItem("HomeFilled", "首页", "/"),
+  new NavigationItem("Memo", "其他航图", "/aip"),
+]);
 </script>
 
 <style>
