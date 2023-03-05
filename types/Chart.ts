@@ -1,9 +1,9 @@
 export default class Chart {
   name: string;
-  uri: string;
+  url: string;
 
-  constructor(name: string, uri: string) {
+  constructor(name: string, url: string) {
     this.name = name;
-    this.uri = uri;
+    this.url = url;
   }
 }

@@ -14,6 +14,7 @@
   "dependencies": {
     "@element-plus/icons-vue": "^2.0.10",
     "@element-plus/nuxt": "^1.0.3",
+    "@nuxtjs/sanity": "^1.6.0",
     "element-plus": "^2.2.32",
     "v-viewer": "^3.0.11"
   }

@@ -1,7 +1,10 @@
 <template>
   <el-container style="height: 100%">
     <el-aside class="sidebar" width="340px">
-      <AirportInfo />
+      <AirportInfo
+        @select-chart="(item: Chart) => chart = item"
+        :airport="airports == null ? undefined : airports.at(0) as AirportDetail"
+      />
     </el-aside>
     <el-main>
       <ChartViewer :chart="chart" />
@@ -9,23 +12,30 @@
   </el-container>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import AirportInfo from "@/components/AirportInfo.vue";
 import ChartViewer from "@/components/ChartViewer.vue";
 import Chart from "@/types/Chart";
+import { AirportDetail } from "~~/types/Airport";
 
-export default defineComponent({
-  components: {
-    AirportInfo,
-    ChartViewer,
+const sanity = useSanity();
+const query = groq`*[_type == 'airport' && icao match '${
+  useRoute().params.icao
+}'] {
+    _id, icao, name, charts[]-> {
+    name, 'url': url.asset->url,
   },
-  data() {
-    return {
-      chart: new Chart(
-        "",
-        "https://yuxiaviation.com/eaip/zvau/ZVAU-STAR-RWY10R.png"
-      ),
-    };
+  notams[]-> {
+    _id, title, content, active_at, end_at,
   },
-});
+}`;
+
+const { pending, data: airports } = useLazyAsyncData<AirportDetail[]>(
+  "airports",
+  () => sanity.fetch(query)
+);
+
+console.log(typeof airports);
+
+const chart: Ref<Chart | undefined> = ref(undefined);
 </script>

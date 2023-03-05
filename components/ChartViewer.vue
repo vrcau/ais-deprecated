@@ -1,9 +1,9 @@
 <template>
   <el-empty v-if="chart == undefined" description="在？看看图？"></el-empty>
   <ClientOnly>
-    <Viewer :options="viewerOptions">
+    <Viewer v-if="chart != undefined" :options="viewerOptions">
       <img
-        :src="chart?.uri"
+        :src="chart?.url"
         height="0"
         width="0"
         style="visibility: collapse"

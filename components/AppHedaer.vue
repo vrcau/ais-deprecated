@@ -40,11 +40,13 @@ import Airport from "@/types/Airport";
 const isDark = ref(useDark());
 const searchKeyword = ref("");
 
-async function querySearch(queryString: string, cb: any) {
-  var result = await useLazyFetch<Airport[]>(
-    `/api/search/airport?icao=${queryString}`
-  );
-  cb(result.data.value);
+const sanity = useSanity();
+
+async function querySearch(queryString: string, callback: any) {
+  let query = groq`*[_type == "airport" && icao match "*${queryString}*"] {_id, icao, name}`;
+  let data = await sanity.fetch<Airport[]>(query);
+
+  callback(data);
 }
 
 function selectAirport(airport: Airport) {
