@@ -12,12 +12,10 @@
     <el-tab-pane label="跑道"> </el-tab-pane>
     <el-tab-pane label="航图">
       <el-tabs>
-        <el-tab-pane label="TAXI"> </el-tab-pane>
-        <el-tab-pane label="SID"> </el-tab-pane>
-        <el-tab-pane label="STAR">
+        <el-tab-pane label="TAXI">
           <ul class="chart-list">
             <li
-              v-for="item in airport?.charts"
+              v-for="item in taxiCharts"
               :key="item.name"
               @click="$emit('selectChart', item)"
             >
@@ -25,8 +23,50 @@
             </li>
           </ul>
         </el-tab-pane>
-        <el-tab-pane label="APP"> </el-tab-pane>
-        <el-tab-pane label="REF"> </el-tab-pane>
+        <el-tab-pane label="SID">
+          <ul class="chart-list">
+            <li
+              v-for="item in sidCharts"
+              :key="item.name"
+              @click="$emit('selectChart', item)"
+            >
+              {{ item.name }}
+            </li>
+          </ul>
+        </el-tab-pane>
+        <el-tab-pane label="STAR">
+          <ul class="chart-list">
+            <li
+              v-for="item in starCharts"
+              :key="item.name"
+              @click="$emit('selectChart', item)"
+            >
+              {{ item.name }}
+            </li>
+          </ul>
+        </el-tab-pane>
+        <el-tab-pane label="APP">
+          <ul class="chart-list">
+            <li
+              v-for="item in approachCharts"
+              :key="item.name"
+              @click="$emit('selectChart', item)"
+            >
+              {{ item.name }}
+            </li>
+          </ul>
+        </el-tab-pane>
+        <el-tab-pane label="REF">
+          <ul class="chart-list">
+            <li
+              v-for="item in refCharts"
+              :key="item.name"
+              @click="$emit('selectChart', item)"
+            >
+              {{ item.name }}
+            </li>
+          </ul>
+        </el-tab-pane>
       </el-tabs>
     </el-tab-pane>
     <el-tab-pane label="NOTAM">
@@ -52,6 +92,26 @@ const emit = defineEmits<{
 
 const props = defineProps({
   airport: AirportDetail,
+});
+
+const taxiCharts = computed(() => {
+  return props.airport?.charts.filter((chart) => chart.type == "TAXI");
+});
+
+const sidCharts = computed(() => {
+  return props.airport?.charts.filter((chart) => chart.type == "SID");
+});
+
+const starCharts = computed(() => {
+  return props.airport?.charts.filter((chart) => chart.type == "STAR");
+});
+
+const approachCharts = computed(() => {
+  return props.airport?.charts.filter((chart) => chart.type == "APP");
+});
+
+const refCharts = computed(() => {
+  return props.airport?.charts.filter((chart) => chart.type == "REF");
 });
 </script>
 

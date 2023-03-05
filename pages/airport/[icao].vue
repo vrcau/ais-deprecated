@@ -23,7 +23,7 @@ const query = groq`*[_type == 'airport' && icao match '${
   useRoute().params.icao
 }'] {
     _id, icao, name, charts[]-> {
-    name, 'url': url.asset->url,
+    name, 'url': url.asset->url, type
   },
   notams[]-> {
     _id, title, content, active_at, end_at,
