@@ -1,7 +1,7 @@
 <template>
   <el-empty v-if="chart == undefined" description="在？看看图？"></el-empty>
   <ClientOnly>
-    <Viewer v-if="chart != undefined" :options="viewerOptions">
+    <Viewer v-if="enableViewer" ref="chartView" :options="viewerOptions">
       <img
         :src="chart?.url"
         height="0"
@@ -13,6 +13,7 @@
 </template>
 
 <script setup lang="ts">
+import { delay } from "lodash";
 import { component as Viewer } from "v-viewer";
 import Chart from "../types/Chart";
 
@@ -48,6 +49,24 @@ const viewerOptions = {
   fullscreen: false,
   keyboard: true,
 };
+
+const chartView = ref<Viewer>();
+const enableViewer = ref(false);
+
+watch(
+  () => props.chart,
+  (chart) => {
+    if (chart == undefined) {
+      enableViewer.value = false;
+    } else {
+      enableViewer.value = false;
+
+      nextTick(() => {
+        enableViewer.value = true;
+      });
+    }
+  }
+);
 </script>
 
 <style>
