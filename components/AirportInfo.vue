@@ -15,20 +15,15 @@
         <el-tab-pane label="TAXI"> </el-tab-pane>
         <el-tab-pane label="SID"> </el-tab-pane>
         <el-tab-pane label="STAR">
-          <ClientOnly>
-            <el-menu
-              class="chart-list"
-              @select="(item: string) => $emit('selectChart', airport?.charts.filter((chart) => chart.name == item).at(0))"
+          <ul class="chart-list">
+            <li
+              v-for="item in airport?.charts"
+              :key="item.name"
+              @click="$emit('selectChart', item)"
             >
-              <el-menu-item
-                v-for="item in airport?.charts"
-                :index="item.name"
-                :key="item.name"
-              >
-                <template #title>{{ item.name }}</template>
-              </el-menu-item>
-            </el-menu>
-          </ClientOnly>
+              {{ item.name }}
+            </li>
+          </ul>
         </el-tab-pane>
         <el-tab-pane label="APP"> </el-tab-pane>
         <el-tab-pane label="REF"> </el-tab-pane>
@@ -75,7 +70,25 @@ const props = defineProps({
 }
 
 .chart-list {
-  border-right: none;
+  list-style-type: none;
+  margin-block-start: 0;
+  margin-block-end: 0;
+  margin-inline-start: 0;
+  margin-inline-end: 0;
+  padding-inline-start: 0;
+}
+
+.chart-list li {
+  display: block;
+  padding: 12px 8px;
+  cursor: pointer;
+  transition: border-color var(--el-transition-duration),
+    background-color var(--el-transition-duration),
+    color var(--el-transition-duration);
+}
+
+.chart-list li:hover {
+  background-color: var(--el-color-primary-light-9);
 }
 
 .chart-item {
