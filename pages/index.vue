@@ -1,90 +1,94 @@
 <template>
-  <div style="padding: var(--el-main-padding)">
-    <div class="banner-image" />
-    <el-row :gutter="16" style="margin-top: 16px">
-      <el-col :span="12">
-        <el-row :gutter="16">
-          <el-col :span="12">
-            <el-card header="活动">
-              <el-empty description="没有活动哦"></el-empty>
-            </el-card>
-          </el-col>
-          <el-col :span="12">
-            <el-card header="正在生效的 NOTAM">
-              <el-card
-                v-for="item in notams"
-                class="notam-card"
-                shadow="never"
-                :key="item"
-              >
-                <h4>{{ item.title }}</h4>
-                <div class="notam-card-time">
-                  <p>生效于 {{ item.active_at }}</p>
-                  <p>结束于 {{ item.end_at }}</p>
-                </div>
-                <p>{{ item.content }}</p>
+  <el-scrollbar>
+    <div style="padding: var(--el-main-padding)">
+      <div class="banner-image" />
+      <el-row :gutter="16" style="margin-top: 16px">
+        <el-col :span="12">
+          <el-row :gutter="16">
+            <el-col :span="12">
+              <el-card header="活动">
+                <el-empty description="没有活动哦"></el-empty>
               </el-card>
-            </el-card>
-          </el-col>
-        </el-row>
-      </el-col>
-      <el-col :span="12">
-        <el-row :gutter="12">
-          <el-col :span="8">
-            <el-card>
-              <el-statistic
-                title="收录机场"
-                suffix="座"
-                :value="homeInfo?.airports"
-              />
-            </el-card>
-          </el-col>
-          <el-col :span="8">
-            <el-card>
-              <el-statistic
-                title="收录航图"
-                suffix="张"
-                :value="homeInfo?.charts"
-              />
-            </el-card>
-          </el-col>
-          <el-col :span="8">
-            <el-card>
-              <el-statistic
-                title="生效 NOTAM"
-                suffix="个"
-                :value="homeInfo?.notams"
-              />
-            </el-card>
-          </el-col>
-        </el-row>
-        <el-row :gutter="16" style="margin-top: 16px">
-          <el-col>
-            <el-card header="更新日志">
-              <el-timeline>
-                <el-timeline-item
-                  timestamp="Cycle 2 - 2023/2/26"
-                  placement="top"
+            </el-col>
+            <el-col :span="12">
+              <el-card header="正在生效的 NOTAM">
+                <el-card
+                  v-for="item in notams"
+                  class="notam-card"
+                  shadow="never"
+                  :key="item"
                 >
-                  <ul>
-                    <li>添加 ZVAU STAR 10R (ASOUL, AIKUN) 标准仪表进场图</li>
-                  </ul>
-                </el-timeline-item>
-                <el-timeline-item
-                  timestamp="Cycle 1 - 2023/1/1"
-                  placement="top"
-                >
-                  <ul>
-                    <li>添加 ADC ZVAU 机场场图和 IAC ILS/DME 10R 仪表进近图</li>
-                  </ul>
-                </el-timeline-item>
-              </el-timeline>
-            </el-card>
-          </el-col>
-        </el-row>
-      </el-col>
-    </el-row>
-  </div>
+                  <h4>{{ item.title }}</h4>
+                  <div class="notam-card-time">
+                    <p>生效于 {{ item.active_at }}</p>
+                    <p>结束于 {{ item.end_at }}</p>
+                  </div>
+                  <p>{{ item.content }}</p>
+                </el-card>
+              </el-card>
+            </el-col>
+          </el-row>
+        </el-col>
+        <el-col :span="12">
+          <el-row :gutter="12">
+            <el-col :span="8">
+              <el-card>
+                <el-statistic
+                  title="收录机场"
+                  suffix="座"
+                  :value="homeInfo?.airports"
+                />
+              </el-card>
+            </el-col>
+            <el-col :span="8">
+              <el-card>
+                <el-statistic
+                  title="收录航图"
+                  suffix="张"
+                  :value="homeInfo?.charts"
+                />
+              </el-card>
+            </el-col>
+            <el-col :span="8">
+              <el-card>
+                <el-statistic
+                  title="生效 NOTAM"
+                  suffix="个"
+                  :value="homeInfo?.notams"
+                />
+              </el-card>
+            </el-col>
+          </el-row>
+          <el-row :gutter="16" style="margin-top: 16px">
+            <el-col>
+              <el-card header="更新日志">
+                <el-timeline>
+                  <el-timeline-item
+                    timestamp="Cycle 2 - 2023/2/26"
+                    placement="top"
+                  >
+                    <ul>
+                      <li>添加 ZVAU STAR 10R (ASOUL, AIKUN) 标准仪表进场图</li>
+                    </ul>
+                  </el-timeline-item>
+                  <el-timeline-item
+                    timestamp="Cycle 1 - 2023/1/1"
+                    placement="top"
+                  >
+                    <ul>
+                      <li>
+                        添加 ADC ZVAU 机场场图和 IAC ILS/DME 10R 仪表进近图
+                      </li>
+                    </ul>
+                  </el-timeline-item>
+                </el-timeline>
+              </el-card>
+            </el-col>
+          </el-row>
+        </el-col>
+      </el-row>
+    </div>
+  </el-scrollbar>
 </template>
 
 <script lang="ts" setup>

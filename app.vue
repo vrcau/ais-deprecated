@@ -1,24 +1,24 @@
 <template>
   <div style="height: 100%" :class="isDark ? 'dark' : ''">
     <el-container style="height: 100%">
-      <el-header style="padding-left: 5px">
-        <AppHeader />
-      </el-header>
+      <el-aside width="64px">
+        <ClientOnly>
+          <el-menu router collapse class="navbar" popper-effect="light">
+            <el-menu-item
+              v-for="item in navigationItems"
+              :index="item.uri"
+              :key="item.uri"
+            >
+              <el-icon><component :is="item.icon" /></el-icon>
+              <template #title>{{ item.name }}</template>
+            </el-menu-item>
+          </el-menu>
+        </ClientOnly>
+      </el-aside>
       <el-container>
-        <el-aside width="64px">
-          <ClientOnly>
-            <el-menu router collapse class="navbar" popper-effect="light">
-              <el-menu-item
-                v-for="item in navigationItems"
-                :index="item.uri"
-                :key="item.uri"
-              >
-                <el-icon><component :is="item.icon" /></el-icon>
-                <template #title>{{ item.name }}</template>
-              </el-menu-item>
-            </el-menu>
-          </ClientOnly>
-        </el-aside>
+        <el-header style="padding-left: 5px">
+          <AppHeader />
+        </el-header>
         <el-main style="padding: 0">
           <NuxtPage />
         </el-main>
