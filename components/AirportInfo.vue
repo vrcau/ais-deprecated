@@ -1,90 +1,113 @@
 <template>
-  <div class="airport-title-card">
+  <div class="pa-3 airport-title-card">
     <h2 class="airport-icao-title">{{ airport?.icao }}</h2>
     <span class="airport-name-title">{{ airport?.name }}</span>
   </div>
-  <el-tabs>
-    <el-tab-pane label="信息">
-      <el-descriptions class="airport-info" :column="1">
-        <el-descriptions-item label="标高">100m</el-descriptions-item>
-      </el-descriptions>
-    </el-tab-pane>
-    <el-tab-pane label="跑道"> </el-tab-pane>
-    <el-tab-pane label="航图">
-      <el-tabs>
-        <el-tab-pane label="TAXI">
-          <ul class="chart-list">
-            <li
+  <v-tabs fixed-tabs v-model="selectedTab" stacked align-tabs="center">
+    <v-tab value="info">
+      <v-icon>mdi-information</v-icon>
+      信息
+    </v-tab>
+    <v-tab value="charts">
+      <v-icon>mdi-file-document-multiple</v-icon>
+      航图
+    </v-tab>
+    <v-tab value="notams">
+      <v-icon>mdi-bulletin-board</v-icon>
+      NOTAM
+    </v-tab>
+  </v-tabs>
+  <v-window v-model="selectedTab">
+    <v-window-item value="info">
+      <div class="pa-3">
+        <div class="text-h6">跑道</div>
+      </div>
+    </v-window-item>
+    <v-window-item value="charts">
+      <v-tabs v-model="selectedChartType" fixed-tabs class="chart-tabs">
+        <v-tab value="taxi">TAXI</v-tab>
+        <v-tab value="sid">SID</v-tab>
+        <v-tab value="star">STAR</v-tab>
+        <v-tab value="app">APP</v-tab>
+        <v-tab value="ref">REF</v-tab>
+      </v-tabs>
+      <v-window v-model="selectedChartType">
+        <v-window-item value="taxi">
+          <v-list>
+            <v-list-item
               v-for="item in taxiCharts"
+              :title="item.name"
+              :value="item"
               :key="item.name"
               @click="$emit('selectChart', item)"
-            >
-              {{ item.name }}
-            </li>
-          </ul>
-        </el-tab-pane>
-        <el-tab-pane label="SID">
-          <ul class="chart-list">
-            <li
+            />
+          </v-list>
+        </v-window-item>
+        <v-window-item value="sid">
+          <v-list>
+            <v-list-item
               v-for="item in sidCharts"
+              :title="item.name"
+              :value="item"
               :key="item.name"
               @click="$emit('selectChart', item)"
-            >
-              {{ item.name }}
-            </li>
-          </ul>
-        </el-tab-pane>
-        <el-tab-pane label="STAR">
-          <ul class="chart-list">
-            <li
+            />
+          </v-list>
+        </v-window-item>
+        <v-window-item value="star">
+          <v-list>
+            <v-list-item
               v-for="item in starCharts"
+              :title="item.name"
+              :value="item"
               :key="item.name"
               @click="$emit('selectChart', item)"
-            >
-              {{ item.name }}
-            </li>
-          </ul>
-        </el-tab-pane>
-        <el-tab-pane label="APP">
-          <ul class="chart-list">
-            <li
+            />
+          </v-list>
+        </v-window-item>
+        <v-window-item value="app">
+          <v-list>
+            <v-list-item
               v-for="item in approachCharts"
+              :title="item.name"
+              :value="item"
               :key="item.name"
               @click="$emit('selectChart', item)"
-            >
-              {{ item.name }}
-            </li>
-          </ul>
-        </el-tab-pane>
-        <el-tab-pane label="REF">
-          <ul class="chart-list">
-            <li
+            />
+          </v-list>
+        </v-window-item>
+        <v-window-item value="ref">
+          <v-list>
+            <v-list-item
               v-for="item in refCharts"
+              :title="item.name"
+              :value="item"
               :key="item.name"
               @click="$emit('selectChart', item)"
-            >
-              {{ item.name }}
-            </li>
-          </ul>
-        </el-tab-pane>
-      </el-tabs>
-    </el-tab-pane>
-    <el-tab-pane label="NOTAM">
-      <el-card v-for="item in airport?.notams" class="notam-card" :key="item">
-        <h4>{{ item.title }}</h4>
-        <div class="notam-card-time">
-          <p>生效于 {{ item.active_at }}</p>
-          <p>结束于 {{ item.end_at }}</p>
-        </div>
-        <p>{{ item.content }}</p>
-      </el-card>
-    </el-tab-pane>
-  </el-tabs>
+            />
+          </v-list>
+        </v-window-item>
+      </v-window>
+    </v-window-item>
+    <v-window-item value="notams">
+      <v-card
+        v-for="item in airport?.notams"
+        class="ma-3"
+        :key="item.title"
+        :title="item.title"
+        :text="item.content"
+        :subtitle="`生效于 ${item.active_at} - ${item.end_at}`"
+      />
+    </v-window-item>
+  </v-window>
 </template>
 
 <script setup lang="ts">
 import { AirportDetail } from "~~/types/Airport";
 import Chart from "~~/types/Chart";
+
+const selectedTab = ref("");
+const selectedChartType = ref("");
 
 const emit = defineEmits<{
   (e: "selectChart", chart: Chart): void;
@@ -116,19 +139,6 @@ const refCharts = computed(() => {
 </script>
 
 <style>
-.airport-icao-title {
-  font-size: var(--el-font-size-large);
-  margin-bottom: 0.1rem;
-}
-
-.airport-name-title {
-  font-size: var(--el-font-size-base);
-}
-
-.airport-title-card {
-  margin-bottom: 0.5rem;
-}
-
 .chart-list {
   list-style-type: none;
   margin-block-start: 0;
@@ -157,27 +167,8 @@ const refCharts = computed(() => {
   height: 3rem;
 }
 
-.airport-info .el-descriptions__cell {
-  padding-bottom: 0 !important;
-}
-
-.notam-card h4 {
-  font-size: var(--el-font-size-extra-large);
-  line-height: 1;
-  margin: 0;
-}
-
-.notam-card p {
-  font-size: var(--el-font-size-base);
-  margin: 0;
-}
-
-.notam-card-time {
-  margin: 8px 0;
-}
-
-.notam-card-time p {
-  font-size: var(--el-font-size-extra-small);
-  color: var(--el-text-color-regular);
+.chart-tabs .v-tab.v-tab {
+  padding: 0;
+  min-width: unset;
 }
 </style>

@@ -1,5 +1,12 @@
 <template>
-  <el-empty v-if="chart == undefined" description="在？看看图？"></el-empty>
+  <div
+    v-if="chart == undefined"
+    class="d-flex justify-center align-center"
+    style="height: 100%"
+  >
+    <v-icon size="x-large">mdi-file-question-outline</v-icon>
+    <h1>在？看看图？</h1>
+  </div>
   <ClientOnly>
     <Viewer v-if="enableViewer" ref="chartView" :options="viewerOptions">
       <img
@@ -13,7 +20,6 @@
 </template>
 
 <script setup lang="ts">
-import { delay } from "lodash";
 import { component as Viewer } from "v-viewer";
 import Chart from "../types/Chart";
 
@@ -70,7 +76,7 @@ watch(
 </script>
 
 <style>
-.dark .viewer-canvas {
+.v-theme--dark .viewer-canvas {
   filter: invert(100%);
 }
 </style>

@@ -1,15 +1,15 @@
 <template>
-  <el-container style="height: 100%">
-    <el-aside class="sidebar" width="340px">
+  <v-layout style="height: 100%">
+    <v-navigation-drawer width="340">
       <AirportInfo
         @select-chart="(item: Chart) => chart = item"
         :airport="airports == null ? undefined : airports.at(0) as AirportDetail"
       />
-    </el-aside>
-    <el-main>
+    </v-navigation-drawer>
+    <v-main>
       <ChartViewer :chart="chart" />
-    </el-main>
-  </el-container>
+    </v-main>
+  </v-layout>
 </template>
 
 <script setup lang="ts">
