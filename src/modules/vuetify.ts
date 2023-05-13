@@ -5,9 +5,8 @@ import '@mdi/font/css/materialdesignicons.css'
 
 import { type UserModule } from '~/types'
 
-export const install: UserModule = ({ app, isClient }) => {
+export const install: UserModule = ({ app }) => {
   const vuetify = createVuetify({
-    ssr: !isClient,
     theme: {
       defaultTheme: 'dark',
     },

@@ -26,7 +26,7 @@ function toggleTheme() {
 
 function selectAirport(icao: string | undefined) {
   if (icao != null)
-    router.push(`airports/${icao}`)
+    router.push(`/airports/${icao}`)
 }
 </script>
 

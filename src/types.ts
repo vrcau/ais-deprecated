@@ -1,6 +1,6 @@
-import { type ViteSSGContext } from 'vite-ssg'
+import type { AppContext } from 'vue'
 
-export type UserModule = (ctx: ViteSSGContext) => void
+export type UserModule = (ctx: AppContext) => void
 
 export interface Airport {
   icao: string

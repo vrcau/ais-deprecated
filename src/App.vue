@@ -2,10 +2,10 @@
 useHead({
   title: 'VAU AIS',
   meta: [
-    { name: 'description', content: 'Opinionated Vite Starter Template' },
+    { name: 'description', content: 'VRChat Aerospace University AIS' },
     {
       name: 'theme-color',
-      content: () => isDark.value ? '#00aba9' : '#ffffff',
+      content: () => isDark.value ? 'red' : '#ffffff',
     },
   ],
   link: [

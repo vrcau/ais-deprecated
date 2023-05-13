@@ -6,7 +6,19 @@ import type { AirportData, Chart } from '~/types'
 const isTeleportDisabled = ref(true)
 onMounted(() => isTeleportDisabled.value = false)
 
-const { result, loading } = useQuery<AirportData>(gql`
+const route = useRoute()
+
+const result: Ref<AirportData | undefined> = ref(undefined)
+const loading: Ref<boolean> = ref(true)
+
+const chart: Ref<Chart | undefined> = ref(undefined)
+
+queryData()
+
+watch(() => route.params.icao, () => queryData())
+
+function queryData() {
+  const query = useQuery<AirportData>(gql`
 query Airport($where: AirportWhereUniqueInput!) {
   airport(where: $where) {
     id
@@ -33,9 +45,11 @@ query Airport($where: AirportWhereUniqueInput!) {
     }
   }
 }
-`, { where: { icao: useRoute().params.icao } })
+`, { where: { icao: route.params.icao } })
 
-const chart: Ref<Chart | undefined> = ref(undefined)
+  watch(query.loading, queryLoading => loading.value = queryLoading)
+  watch(query.result, queryResult => result.value = queryResult)
+}
 </script>
 
 <template>

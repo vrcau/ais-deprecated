@@ -1,5 +1,5 @@
-import { DefaultApolloClient } from '@vue/apollo-composable'
 import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client/core'
+import { DefaultApolloClient } from '@vue/apollo-composable'
 import { type UserModule } from '~/types'
 
 const httpLink = createHttpLink({
@@ -8,17 +8,10 @@ const httpLink = createHttpLink({
 
 const cache = new InMemoryCache()
 
-export const install: UserModule = ({ app, isClient }) => {
+export const install: UserModule = ({ app }) => {
   const apolloClient = new ApolloClient({
     link: httpLink,
     cache,
-    ...(!isClient
-      ? {
-          ssrMode: true,
-        }
-      : {
-          ssrForceFetchDelay: 100,
-        }),
   })
 
   app.provide(DefaultApolloClient, apolloClient)
