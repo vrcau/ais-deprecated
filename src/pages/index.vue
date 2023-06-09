@@ -33,7 +33,11 @@ query HomeDataQuery {
 
 <template>
   <v-container>
-    <v-parallax src="/home.webp" height="400" />
+    <div class="ma-2">
+      <div class="text-h3">
+        欢迎
+      </div>
+    </div>
     <v-progress-linear v-if="loading" indeterminate />
     <v-row v-if="!loading" class="my-2">
       <v-col md="3" xs="6" cols="12">

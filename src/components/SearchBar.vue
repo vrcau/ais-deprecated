@@ -26,7 +26,9 @@ const isLoading = ref(false)
 const searchResult: Ref<Airport[]> = ref([])
 const selectedAirport: Ref<string | undefined> = ref(undefined)
 
-function querySearch(queryString: string) {
+querySearch()
+
+function querySearch() {
   isLoading.value = true
   const { result, loading } = useQuery<AirportsData>(gql`
   query Airports {
@@ -54,14 +56,14 @@ function querySearch(queryString: string) {
     }
   }
 }
-  `, { keyword: queryString })
+  `)
 
   watch(loading, loading => isLoading.value = loading)
   watch(result, result => searchResult.value = result?.airports as Airport[])
 }
 
-watch(searchKeyword, (keyword) => {
-  querySearch(keyword)
+watch(searchKeyword, () => {
+  querySearch()
 })
 
 watch(selectedAirport, (icao) => {
@@ -72,7 +74,7 @@ watch(selectedAirport, (icao) => {
 <template>
   <v-autocomplete
     v-model:search="searchKeyword" v-model="selectedAirport" :items="searchResult" clearable
-    item-title="icao" item-value="icao" density="compact" label="搜索机场" hide-no-data hide-details style="max-width: 300px"
+    item-title="icao" item-value="icao" density="compact" label="搜索机场" hide-no-data hide-details
   >
     <template #item="{ props, item }">
       <v-list-item v-bind="props" :title="item?.raw.name" :subtitle="item?.raw.icao" />

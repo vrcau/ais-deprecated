@@ -1,42 +1,88 @@
 <script setup lang="ts">
-import type { Airport, Chart } from '~/types'
+import { useQuery } from '@vue/apollo-composable'
+import gql from 'graphql-tag'
+import { useChartStore } from '~/stores/chart'
+import type { Airport, AirportData } from '~/types'
 
-const props = defineProps<{
-  airport: Airport | undefined
-}>()
-defineEmits<{
-  (e: 'selectChart', chart: Chart): void
-}>()
+const route = useRoute()
+const router = useRouter()
+
+const chartStore = useChartStore()
+
+const result: Ref<Airport | undefined> = ref(undefined)
+const loading: Ref<boolean> = ref(true)
+
+queryData()
+
+watch(() => route.params.icao, () => queryData())
+
+function queryData() {
+  const query = useQuery<AirportData>(gql`
+query Airport($where: AirportWhereUniqueInput!) {
+  airport(where: $where) {
+    id
+    name
+    icao
+    notams {
+      ... on Notam {
+        id
+        activeAt
+        endAt
+        title
+        content
+      }
+    }
+    charts {
+      ... on Chart {
+        id
+        name
+        url {
+          url
+        },
+        type
+      }
+    }
+  }
+}
+`, { where: { icao: route.params.icao } })
+
+  watch(query.loading, queryLoading => loading.value = queryLoading)
+  watch(query.result, queryResult => result.value = queryResult?.airport)
+}
+
 const selectedTab = ref('')
 const selectedChartType = ref('')
 
 const taxiCharts = computed(() => {
-  return props.airport?.charts.filter(chart => chart.type === 'TAXI')
+  return result.value?.charts.filter(chart => chart.type === 'TAXI')
 })
 
 const sidCharts = computed(() => {
-  return props.airport?.charts.filter(chart => chart.type === 'SID')
+  return result.value?.charts.filter(chart => chart.type === 'SID')
 })
 
 const starCharts = computed(() => {
-  return props.airport?.charts.filter(chart => chart.type === 'STAR')
+  return result.value?.charts.filter(chart => chart.type === 'STAR')
 })
 
 const approachCharts = computed(() => {
-  return props.airport?.charts.filter(chart => chart.type === 'APP')
+  return result.value?.charts.filter(chart => chart.type === 'APP')
 })
 
 const refCharts = computed(() => {
-  return props.airport?.charts.filter(chart => chart.type === 'REF')
+  return result.value?.charts.filter(chart => chart.type === 'REF')
 })
 </script>
 
 <template>
-  <div class="pa-3 airport-title-card">
-    <h2 class="airport-icao-title">
-      {{ airport?.icao }}
-    </h2>
-    <span class="airport-name-title">{{ airport?.name }}</span>
+  <div class="pa-3 airport-icao-title">
+    <v-btn icon="mdi-arrow-left" variant="text" class="mr-3" @click="router.push('/')" />
+    <div>
+      <h2>
+        {{ result?.icao }}
+      </h2>
+      <span>{{ result?.name }}</span>
+    </div>
   </div>
   <v-tabs v-model="selectedTab" fixed-tabs stacked align-tabs="center">
     <v-tab value="info">
@@ -83,7 +129,7 @@ const refCharts = computed(() => {
           <v-list>
             <v-list-item
               v-for="item in taxiCharts" :key="item.name" :title="item.name" :value="item"
-              @click="$emit('selectChart', item)"
+              @click="chartStore.setSelectedChart(item)"
             />
           </v-list>
         </v-window-item>
@@ -91,7 +137,7 @@ const refCharts = computed(() => {
           <v-list>
             <v-list-item
               v-for="item in sidCharts" :key="item.name" :title="item.name" :value="item"
-              @click="$emit('selectChart', item)"
+              @click="chartStore.setSelectedChart(item)"
             />
           </v-list>
         </v-window-item>
@@ -99,7 +145,7 @@ const refCharts = computed(() => {
           <v-list>
             <v-list-item
               v-for="item in starCharts" :key="item.name" :title="item.name" :value="item"
-              @click="$emit('selectChart', item)"
+              @click="chartStore.setSelectedChart(item)"
             />
           </v-list>
         </v-window-item>
@@ -107,15 +153,15 @@ const refCharts = computed(() => {
           <v-list>
             <v-list-item
               v-for="item in approachCharts" :key="item.name" :title="item.name" :value="item"
-              @click="$emit('selectChart', item)"
+              @click="chartStore.setSelectedChart(item)"
             />
           </v-list>
         </v-window-item>
         <v-window-item value="ref">
           <v-list>
             <v-list-item
-              v-for="item in refCharts" :key="item.name" :title="item.name" :value="item"
-              @click="$emit('selectChart', item)"
+              v-for=" item in refCharts" :key="item.name" :title="item.name" :value="item"
+              @click="chartStore.setSelectedChart(item)"
             />
           </v-list>
         </v-window-item>
@@ -123,14 +169,18 @@ const refCharts = computed(() => {
     </v-window-item>
     <v-window-item value="notams">
       <v-card
-        v-for="item in airport?.notams" :key="item.title" class="ma-3" :title="item.title" :text="item.content"
+        v-for="item in result?.notams" :key="item.title" class="ma-3" :title="item.title" :text="item.content"
         :subtitle="`生效于 ${item.activeAt} - ${item.endAt}`"
       />
     </v-window-item>
   </v-window>
 </template>
 
-<style>
+<style scoped>
+.airport-icao-title {
+  display: flex;
+}
+
 .chart-list {
   list-style-type: none;
   margin-block-start: 0;

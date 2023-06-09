@@ -11,6 +11,7 @@ declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     AirportInfo: typeof import('./components/AirportInfo.vue')['default']
     ChartViewer: typeof import('./components/ChartViewer.vue')['default']
+    NavigationList: typeof import('./components/NavigationList.vue')['default']
     README: typeof import('./components/README.md')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

@@ -1,8 +1,7 @@
 import path from 'node:path'
 import { defineConfig } from 'vite'
 import Vue from '@vitejs/plugin-vue'
-import Pages from 'vite-plugin-pages'
-import Layouts from 'vite-plugin-vue-layouts'
+import VueRouter from 'unplugin-vue-router/vite'
 import Components from 'unplugin-vue-components/vite'
 import AutoImport from 'unplugin-auto-import/vite'
 import Markdown from 'vite-plugin-vue-markdown'
@@ -37,12 +36,9 @@ export default defineConfig({
     }),
 
     // https://github.com/hannoeru/vite-plugin-pages
-    Pages({
+    VueRouter({
       extensions: ['vue', 'md'],
     }),
-
-    // https://github.com/JohnCampionJr/vite-plugin-vue-layouts
-    Layouts(),
 
     // https://github.com/antfu/unplugin-auto-import
     AutoImport({

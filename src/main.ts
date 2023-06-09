@@ -1,18 +1,37 @@
-// import { ViteSSG } from 'vite-ssg'
-import { setupLayouts } from 'virtual:generated-layouts'
-
-// import Previewer from 'virtual:vue-component-preview'
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router/auto'
 import App from './App.vue'
 import type { UserModule } from './types'
-import generatedRoutes from '~pages'
 
-// import '@unocss/reset/tailwind.css'
 import './styles/main.css'
 import 'uno.css'
 
-const routes = setupLayouts(generatedRoutes)
-const router = createRouter({ history: createWebHistory(), routes })
+import NavigationList from './components/NavigationList.vue'
+import indexVue from './pages/index.vue'
+import IcaoVue from './pages/airports/[icao].vue'
+import AirportInfoVue from './components/AirportInfo.vue'
+import aipVue from './pages/aip.vue'
+
+const router = createRouter({
+  history: createWebHistory(),
+  extendRoutes(routes) {
+    routes[routes.findIndex(record => record.path === '/')].components = {
+      default: indexVue,
+      drawer: NavigationList,
+    }
+
+    routes[routes.findIndex(record => record.path.includes('airports'))].components = {
+      default: IcaoVue,
+      drawer: AirportInfoVue,
+    }
+
+    routes[routes.findIndex(record => record.path === '/aip')].components = {
+      default: aipVue,
+      drawer: NavigationList,
+    }
+
+    return routes
+  },
+})
 
 const app = createApp(App)
 Object.values(import.meta.glob<{ install: UserModule }>('./modules/*.ts', { eager: true }))
