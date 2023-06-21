@@ -2,6 +2,7 @@
 import { useTheme } from 'vuetify'
 
 const theme = useTheme()
+const isDrawerOpen = ref(true)
 
 theme.global.name.value = isDark ? 'dark' : 'light'
 watch(isDark, dark => theme.global.name.value = dark ? 'dark' : 'light')
@@ -33,6 +34,7 @@ useHead({
   <v-app>
     <v-layout id="layout">
       <v-app-bar style="position: fixed">
+        <v-app-bar-nav-icon variant="text" @click="isDrawerOpen = !isDrawerOpen" />
         <v-app-bar-title>
           VRChat 航空航天大学 AIS
         </v-app-bar-title>
@@ -46,7 +48,7 @@ useHead({
           </v-icon>
         </v-btn>
       </v-app-bar>
-      <v-navigation-drawer permanent style="position: fixed" width="320">
+      <v-navigation-drawer v-model="isDrawerOpen" style="position: fixed" width="320">
         <RouterView name="drawer" />
       </v-navigation-drawer>
       <v-main>

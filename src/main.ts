@@ -5,28 +5,27 @@ import type { UserModule } from './types'
 import './styles/main.css'
 import 'uno.css'
 
-import NavigationList from './components/NavigationList.vue'
-import indexVue from './pages/index.vue'
-import IcaoVue from './pages/airports/[icao].vue'
-import AirportInfoVue from './components/AirportInfo.vue'
-import aipVue from './pages/aip.vue'
-
 const router = createRouter({
   history: createWebHistory(),
   extendRoutes(routes) {
     routes[routes.findIndex(record => record.path === '/')].components = {
-      default: indexVue,
-      drawer: NavigationList,
+      default: () => import('./pages/index.vue'),
+      drawer: () => import('./components/NavigationList.vue'),
     }
 
-    routes[routes.findIndex(record => record.path.includes('airports'))].components = {
-      default: IcaoVue,
-      drawer: AirportInfoVue,
+    const airportRouteChildren = routes[routes.findIndex(record => record.path.includes('airports'))].children
+    if (airportRouteChildren !== undefined) {
+      const airportRoute = airportRouteChildren[0]
+
+      airportRoute.components = {
+        default: () => import('./pages/airports/[icao].vue'),
+        drawer: () => import('./components/AirportInfo.vue'),
+      }
     }
 
     routes[routes.findIndex(record => record.path === '/aip')].components = {
-      default: aipVue,
-      drawer: NavigationList,
+      default: () => import('./pages/aip.vue'),
+      drawer: () => import('./components/NavigationList.vue'),
     }
 
     return routes

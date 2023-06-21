@@ -48,6 +48,9 @@ query Airport($where: AirportWhereUniqueInput!) {
 
   watch(query.loading, queryLoading => loading.value = queryLoading)
   watch(query.result, queryResult => result.value = queryResult?.airport)
+
+  loading.value = query.loading.value
+  result.value = query.result?.value?.airport
 }
 
 const selectedTab = ref('')
